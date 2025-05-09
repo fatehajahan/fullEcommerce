@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@utility container {
+    padding-inline: 10px;
+    margin-inline: auto;
+
+    @variant sm {
+        padding-inline: 20px;
+    }
+
+    @variant lg {
+        padding-inline: 80px;
+    }
+
+    @variant xl {
+        padding-inline: 120px;
+    }
+}
+
+@theme{
+    --background-image-banner : url('../src/assets/homepage/banner.jpg');
+    --background-image-shop : url('../src/assets/homepage/shopnow.jpg')
+}
+
+@theme{
+    --font-urbanist : Urbanist, sans-serif;
+    --font-cormot : Cormorant Garamond, serif;
+    --font-Dafoe : Mr Dafoe, cursive;
+}
+
+
+/* @layer base {
+    body {
+        font-family: 'Urbanist', sans-serif;
+    }
+} */

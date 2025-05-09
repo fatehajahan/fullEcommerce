@@ -33,7 +33,7 @@ const productSchema = new Schema({
         ref: "SubcategoryList",
     },
     discount: {
-        type: Number,
+        type: String,
         default: 0
     }
 }, { timestamps: true })

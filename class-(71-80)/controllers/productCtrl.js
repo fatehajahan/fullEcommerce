@@ -4,19 +4,25 @@ const productSchema = require("../models/productSchema")
 
 async function productCtrl(req, res) {
     try {
-        const { name, description, price, fragrance, image, category, subCategory, discount } = req.body
-        const foundCategory = await categorySchema.findById(category)
-        console.log("Incoming data:", req.body)
-        // const imgPath = req.file.path
-        // const imgUrl = await uploadImage(imgPath)
+        const { name, description, price, flavour, category, subCategory, discount } = req.body
+        console.log(category)
+        const foundCategory = await categorySchema.findOne({ categoryName: category })
 
-        if (!name || !description || !price || !fragrance || !foundCategory) {
-            return res.json({ message: "All fields are required" })
+        const imgPath = req.file.path
+        const imgUrl = await uploadImage(imgPath)
+
+        if (!name || !price || !description || !flavour) {
+            return res.status(400).json({ message: "All fields are required" })
+        }
+        if (!foundCategory) {
+            return res.status(200).json({ message: "Category not found" })
         }
         const product = new productSchema({
-            name, description, price, fragrance,
-            //  image: imgUrl.secure_url, 
-            subCategory, category: foundCategory.categoryName, discount
+            name, description, price, flavour, 
+            image: imgUrl.secure_url, 
+            subCategory, 
+            category: foundCategory.categoryName, 
+            discount
         })
         await product.save()
         await categorySchema.findOneAndUpdate(
@@ -31,10 +37,40 @@ async function productCtrl(req, res) {
             data: product
         })
     } catch (error) {
+        console.log(error)
         res.status(400).json({
             message: "product creation failed", statues: "Failed"
         })
     }
 }
+async function getAllProductCtrl(req, res) {
+    try {
+        const allProduct = await productSchema.find({})
+        res.status(200).json({
+            message: "get all category",
+            statues: "success",
+            data: allProduct
+        })
+    } catch (error) {
+        res.status(400).json({ error: "internal server error", statues: "failed" })
+    }
+}
 
-module.exports = productCtrl
+async function deleteProduct(req, res) {
+    try {
+        const { id } = req.params;
+        const deleteProduct = await productSchema.findByIdAndDelete(id);
+
+        res.status(200).json({
+            message: "Category deleted successfully",
+            data: deleteProduct
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal server error",
+            status: "error"
+        });
+    }
+}
+module.exports = { productCtrl, getAllProductCtrl , deleteProduct}

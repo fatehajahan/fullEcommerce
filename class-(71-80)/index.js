@@ -10,7 +10,11 @@ const app = express();
 const port = 3000;
 dbConnection()
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', methods:['GET', 'POST', 'PUT', 'DELETE'], allowedHeaders:[
+        'Content-Type', 'Authorization'
+    ]
+}));
 app.use(express.json());
 const store = new MongoDBStore({
     uri : `mongodb+srv://${process.env.DBUSER_NAME}:${process.env.DBUSER_PASSWORD}@cluster0.liaz7.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`,

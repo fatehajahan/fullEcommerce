@@ -32,6 +32,10 @@ const Sidebar = () => {
                             <Link to="/createproduct" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
                                 Create Product
                             </Link>
+
+                            <Link to="/productList" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
+                                Product List
+                            </Link>
                         </div>
                     </div>
                 )}

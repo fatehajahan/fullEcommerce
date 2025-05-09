@@ -10,26 +10,48 @@ const CreateProduct = () => {
         discount: "",
         category: "",
         subCategory: "",
-        // image: null
+        image: null
     })
     const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        })
+        console.log(e.target.files)
+        if (e.target.name == "image") {
+            setForm({ ...form, image: e.target.files[0] })
+        }
+        else {
+            setForm({
+                ...form,
+                [e.target.name]: e.target.value
+            })
+        }
     }
-    // const handleImageChange = (e) => {
-    //     setForm({
-    //         ...form,
-    //         productImage: e.target.files[0]
-    //     });
-    // };
 
     const handleCreateProduct = async () => {
         console.log(form)
         try {
-            console.log("Sending data to backend:", form);
-            const response = await axios.post("http://localhost:3000/api/v1/product/createproduct", form)
+            const formDate = new FormData()
+            Object.entries(form).forEach(([key, value]) => {
+                console.log(key, value)
+                console.log(formDate)
+
+                if (key == "image") {
+                    formDate.append("image", value );
+                } else {
+                    formDate.append(key, value)
+                }
+
+            })
+            console.log(form)
+            console.log(formDate)
+
+            const response = await axios.post(
+                "http://localhost:3000/api/v1/product/createproduct",
+                formDate,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    }
+                }
+            )
             console.log(response)
         } catch (error) {
             console.log(error)
@@ -83,7 +105,7 @@ const CreateProduct = () => {
                             name='category' className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-400">
                             {
                                 categoryies.map((category, index) => (
-                                    <option key={category._id} value={category._id}>{category.categoryName}</option>
+                                    <option key={category._id} value={category._id}>{category._id}</option>
                                 ))
                             }
                         </select>
@@ -107,11 +129,12 @@ const CreateProduct = () => {
                         <label className="block font-semibold mb-1">Product's Subcategory</label>
                         <select
                             value={form.subCategory}
+                            name='subCategory'
                             onChange={(e) => setForm({ ...form, subCategory: e.target.value })}
                             className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-400">
                             {
                                 subCategoryies.map((subcategory, index) => (
-                                    <option key={subcategory._id} value={subcategory._id}>{subcategory.subCategoryName}</option>
+                                    <option key={subcategory._id} value={subcategory._id}>{subcategory._id}</option>
                                 ))
                             }
                         </select>
@@ -130,13 +153,15 @@ const CreateProduct = () => {
                     </div>
 
                     {/* Product Image */}
-                    {/* <div>
+                    <div>
                         <label className="block font-semibold mb-1">Product's Image</label>
                         <input
+                            onChange={handleChange}
                             type="file"
+                            name='image'
                             className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-400"
                         />
-                    </div> */}
+                    </div>
 
                     {/* Product Price */}
                     <div>

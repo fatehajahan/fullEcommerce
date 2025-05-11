@@ -102,10 +102,12 @@ const CreateProduct = () => {
                         <select
                             value={form.category}
                             onChange={(e) => setForm({ ...form, category: e.target.value })}
-                            name='category' className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-400">
+                            name='category'
+                            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-400">
+                            <option value="">Select Category</option>
                             {
-                                categoryies.map((category, index) => (
-                                    <option key={category._id} value={category._id}>{category._id}</option>
+                                categoryies.map((category) => (
+                                    <option key={category._id} value={category._id}>{category.categoryName}</option>
                                 ))
                             }
                         </select>
@@ -132,9 +134,10 @@ const CreateProduct = () => {
                             name='subCategory'
                             onChange={(e) => setForm({ ...form, subCategory: e.target.value })}
                             className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-400">
+                            <option value="">Select Subcategory</option>
                             {
-                                subCategoryies.map((subcategory, index) => (
-                                    <option key={subcategory._id} value={subcategory._id}>{subcategory._id}</option>
+                                subCategoryies.map((subcategory) => (
+                                    <option key={subcategory._id} value={subcategory._id}>{subcategory.subCategoryName}</option>
                                 ))
                             }
                         </select>

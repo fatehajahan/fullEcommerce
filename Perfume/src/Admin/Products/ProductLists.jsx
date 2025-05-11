@@ -33,8 +33,8 @@ const ProductLists = () => {
                         <thead className="bg-gray-100">
                             <tr className="rounded-t-lg">
                                 <th className="px-6 py-4">Sr No</th>
-                                <th className="px-6 py-4">Category Name</th>
-                                <th className="px-6 py-4">Category Description</th>
+                                <th className="px-6 py-4">Product Name</th>
+                                <th className="px-6 py-4">Product Description</th>
                                 <th className="px-6 py-4">Update</th>
                                 <th className="px-6 py-4">Delete</th>
                             </tr>

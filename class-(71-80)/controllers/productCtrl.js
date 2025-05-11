@@ -4,8 +4,15 @@ const productSchema = require("../models/productSchema")
 
 async function productCtrl(req, res) {
     try {
-        const { name, description, price, flavour, category, subCategory, discount } = req.body
-        console.log(category)
+        const { name, description, 
+            price, 
+            fragrance, 
+            category, 
+            subCategory, 
+            discount 
+        } 
+            = req.body
+        // console.log(category)
         const foundCategory = await categorySchema.findOne({ categoryName: category })
 
         const imgPath = req.file.path
@@ -18,10 +25,12 @@ async function productCtrl(req, res) {
             return res.status(200).json({ message: "Category not found" })
         }
         const product = new productSchema({
-            name, description, price, flavour, 
-            image: imgUrl.secure_url, 
-            subCategory, 
-            category: foundCategory.categoryName, 
+            name, description, 
+            price, 
+            fragrance,
+            image: imgUrl.secure_url,
+            subCategory,
+            category: foundCategory.categoryName,
             discount
         })
         await product.save()
@@ -55,7 +64,31 @@ async function getAllProductCtrl(req, res) {
         res.status(400).json({ error: "internal server error", statues: "failed" })
     }
 }
+async function updateSingleProductCtrl(req, res) {
+    try {
+        const { id } = req.params;
+        const { categoryName, categoryDescription } = req.body;
 
+        const updateData = {};
+        if (categoryName) updateData.categoryName = categoryName;
+        if (categoryDescription) updateData.categoryDescription = categoryDescription;
+
+        const updatedCategory = await categorySchema.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true }
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ message: "Category not found" });
+        }
+
+        res.status(200).json({ message: "Category updated successfully", data: updatedCategory });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error", status: "failed" });
+    }
+}
 async function deleteProduct(req, res) {
     try {
         const { id } = req.params;
@@ -73,4 +106,4 @@ async function deleteProduct(req, res) {
         });
     }
 }
-module.exports = { productCtrl, getAllProductCtrl , deleteProduct}
+module.exports = { productCtrl, getAllProductCtrl, deleteProduct, updateSingleProductCtrl }

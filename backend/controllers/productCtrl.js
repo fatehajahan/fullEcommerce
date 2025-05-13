@@ -4,45 +4,50 @@ const productSchema = require("../models/productSchema")
 
 async function productCtrl(req, res) {
     try {
-        const { name, description, 
-            price, 
-            fragrance, 
-            category, 
-            subCategory, 
-            discount 
-        } 
-            = req.body
-        // console.log(category)
-        const foundCategory = await categorySchema.findOne({ categoryName: category })
+        const { name, description, price, fragrance, category, subCategory, discount } = req.body;
+
+        // Validate required fields first
+        if (!name || !price || !description || !fragrance || !category) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        // Find category
+        const foundCategory = await categorySchema.findOne({ categoryName: category });
+        console.log(foundCategory)
+        if (!foundCategory) {
+            return res.status(404).json({ message: "Category not found" });
+        }
+
+        // Validate and handle file
+        if (!req.file) {
+            return res.status(400).json({ message: "Image file is required" });
+        }
 
         const imgPath = req.file.path
         const imgUrl = await uploadImage(imgPath)
 
-        if (!name || !price || !description || !flavour) {
-            return res.status(400).json({ message: "All fields are required" })
-        }
-        if (!foundCategory) {
-            return res.status(200).json({ message: "Category not found" })
-        }
+        // Create new product
         const product = new productSchema({
-            name, description, 
-            price, 
+            name,
+            description,
+            price,
             fragrance,
             image: imgUrl.secure_url,
             subCategory,
             category: foundCategory.categoryName,
             discount
-        })
+        });
         await product.save()
+
+         // Update category with product
         await categorySchema.findOneAndUpdate(
             { categoryName: category },
-            {
-                $push: { product: product.name }
-            },
+            { $push: { product: product.name } },
             { new: true }
-        )
+        );
+
         res.status(200).json({
-            message: "product created successfully", statues: "success",
+            message: "product created successfully", status: "success",
             data: product
         })
     } catch (error) {

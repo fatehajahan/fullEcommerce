@@ -28,24 +28,24 @@ const CreateProduct = () => {
     const handleCreateProduct = async () => {
         console.log(form)
         try {
-            const formDate = new FormData()
+            const formData = new FormData()
             Object.entries(form).forEach(([key, value]) => {
                 console.log(key, value)
-                console.log(formDate)
+                console.log(formData)
 
                 if (key == "image") {
-                    formDate.append("image", value );
+                    formData.append("image", value );
                 } else {
-                    formDate.append(key, value)
+                    formData.append(key, value)
                 }
 
             })
             console.log(form)
-            console.log(formDate)
+            console.log(formData)
 
             const response = await axios.post(
                 "http://localhost:3000/api/v1/product/createproduct",
-                formDate,
+                formData,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",
@@ -107,7 +107,7 @@ const CreateProduct = () => {
                             <option value="">Select Category</option>
                             {
                                 categoryies.map((category) => (
-                                    <option key={category._id} value={category._id}>{category.categoryName}</option>
+                                    <option key={category.categoryName} value={category.categoryName}>{category.categoryName}</option>
                                 ))
                             }
                         </select>
@@ -137,7 +137,7 @@ const CreateProduct = () => {
                             <option value="">Select Subcategory</option>
                             {
                                 subCategoryies.map((subcategory) => (
-                                    <option key={subcategory._id} value={subcategory._id}>{subcategory.subCategoryName}</option>
+                                    <option key={subcategory.subCategoryName} value={subcategory.subCategoryName}>{subcategory.subCategoryName}</option>
                                 ))
                             }
                         </select>

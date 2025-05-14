@@ -34,11 +34,11 @@ const CreateSubCategory = () => {
                 <h1 className='text-[50px]'>Create a New Sub Category</h1>
                 <div>
                     {/* category name */}
-                    <label htmlFor="subCategoryName">Category's Name</label>
+                    <label htmlFor="subCategoryName">SubCategory's Name</label>
                     <input onChange={(e) => setSubCategoryName(e.target.value)} type="text" className='border border-[#4a4a4a] py-[10px] px-[15px] w-full mb-[26px]' />
 
                     {/* category Description */}
-                    <label htmlFor="subCategoryDescription">Category's Description</label>
+                    <label htmlFor="subCategoryDescription">SubCategory's Description</label>
                     <textarea onChange={(e) => setsubCategoryDescription(e.target.value)} type="text" className='border border-[#4a4a4a] py-[10px] px-[15px] w-full mb-[26px] ' />
 
                     <div>

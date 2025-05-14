@@ -12,7 +12,7 @@ const Sidebar = () => {
             <div>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    className="inline-flex justify-center w-[300px] rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
                 >
                     E-Commerce
                 </button>
@@ -20,19 +20,29 @@ const Sidebar = () => {
                 {isOpen && (
                     <div className="z-10 mt-2 w-[300px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 font-urbanist ">
                         <div className="py-1">
+                            {/* Category */}
+                            <p className='pb-[13px] text-[30px] pl-[4px] underline'>Category Section</p>
                             <Link to="/createcategory" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
                                 Create Category
                             </Link>
                             <Link to="/categorylist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
                                 Category List
                             </Link>
+
+                            {/* SubCategory */}
+                            <p className='pb-[13px] text-[30px] pl-[4px] underline'>SubCategory Section</p>
                             <Link to="/createsubcategory" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
                                 Create SubCategory
                             </Link>
+                            <Link to="/subCategoryList" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
+                                SubCategory List
+                            </Link>
+
+                            {/* Product */}
+                            <p className='pb-[13px] text-[30px] pl-[4px] underline'> Product Section</p>
                             <Link to="/createproduct" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
                                 Create Product
                             </Link>
-
                             <Link to="/productList" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-[18px]">
                                 Product List
                             </Link>

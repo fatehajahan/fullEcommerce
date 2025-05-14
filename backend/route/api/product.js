@@ -20,7 +20,7 @@ route.post("/createproduct",
     upload.single("image"),
     productCtrl)
 route.get("/getallproduct", getAllProductCtrl)
-route.patch("/updatesingleproduct/:id", updateSingleProductCtrl)
+route.patch("/updatesingleproduct/:id", upload.single("image"), updateSingleProductCtrl)
 route.delete("/deleteproduct/:id", deleteProduct)
 
 module.exports = route

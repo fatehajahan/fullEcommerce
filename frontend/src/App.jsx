@@ -26,6 +26,7 @@ import CategoryUpdate from "./Admin/Categories/CategoryUpdate";
 import CreateSubCategory from "./Admin/SubCategory/CreateSubCategory";
 import ProductLists from "./Admin/Products/ProductLists";
 import ProductUpdate from "./Admin/Products/ProductUpdate";
+import SubCategoryList from "./Admin/SubCategory/SubCategoryList";
 
 const Layout = () => {
   const [cartOpen, setCartOpen] = useState(false)
@@ -89,6 +90,7 @@ const router = createBrowserRouter(
         <Route path="/updatecategory/:id" element={<CategoryUpdate />} />
         <Route path="/updateProduct/:id" element={<ProductUpdate />} />
         <Route path="/createsubcategory" element={<CreateSubCategory />} />
+        <Route path="/subCategoryList" element={<SubCategoryList />} />
         <Route path="/productList" element={<ProductLists />} />
         <Route path="/updateProduct/:id" element={<ProductLists />} />
       </Route>

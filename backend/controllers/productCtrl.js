@@ -69,31 +69,62 @@ async function getAllProductCtrl(req, res) {
         res.status(400).json({ error: "internal server error", statues: "failed" })
     }
 }
+
+async function getSingleProductCtrl(req, res) {
+    const { id } = req.params //we need to use params when we need id. 
+    const getSingleProduct = await productSchema.findOne({ _id: id })
+
+    res.status(200).json({
+        message: "get single category",
+        statues: "success",
+        data: getSingleProduct
+    })
+}
+
 async function updateSingleProductCtrl(req, res) {
     try {
         const { id } = req.params;
-        const { categoryName, categoryDescription } = req.body;
+        const { name, description, price, fragrance, category, subCategory, discount } = req.body;
 
-        const updateData = {};
-        if (categoryName) updateData.categoryName = categoryName;
-        if (categoryDescription) updateData.categoryDescription = categoryDescription;
-
-        const updatedCategory = await categorySchema.findByIdAndUpdate(
-            id,
-            updateData,
-            { new: true }
-        );
-
-        if (!updatedCategory) {
+        const foundCategory = await categorySchema.findOne({ categoryName: category });
+        if (!foundCategory) {
             return res.status(404).json({ message: "Category not found" });
         }
 
-        res.status(200).json({ message: "Category updated successfully", data: updatedCategory });
+        const updateData = {
+            name,
+            description,
+            price,
+            fragrance,
+            category: foundCategory.categoryName,
+            subCategory,
+            discount,
+        };
+
+        // Handle image if uploaded
+        if (req.file) {
+            const imgPath = req.file.path;
+            const imgUrl = await uploadImage(imgPath);
+            updateData.image = imgUrl.secure_url;
+        }
+
+        const updatedProduct = await productSchema.findByIdAndUpdate(id, updateData, { new: true });
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.status(200).json({
+            message: "Product updated successfully",
+            data: updatedProduct
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal server error", status: "failed" });
     }
 }
+
+
 async function deleteProduct(req, res) {
     try {
         const { id } = req.params;
@@ -111,4 +142,4 @@ async function deleteProduct(req, res) {
         });
     }
 }
-module.exports = { productCtrl, getAllProductCtrl, deleteProduct, updateSingleProductCtrl }
+module.exports = { productCtrl, getAllProductCtrl, deleteProduct, updateSingleProductCtrl, getSingleProductCtrl }

@@ -27,6 +27,7 @@ import CreateSubCategory from "./Admin/SubCategory/CreateSubCategory";
 import ProductLists from "./Admin/Products/ProductLists";
 import ProductUpdate from "./Admin/Products/ProductUpdate";
 import SubCategoryList from "./Admin/SubCategory/SubCategoryList";
+import OtpVerify from "./mainPage/OtpVerify/OtpVerify";
 
 const Layout = () => {
   const [cartOpen, setCartOpen] = useState(false)
@@ -80,10 +81,11 @@ const router = createBrowserRouter(
       {/* Public Routes outside layout */}
       <Route path="/registration" element={<Registration />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/verification" element={<OtpVerify />} />
 
       {/* Admin Layout */}
       <Route element={<LayoutForAdmin />}>
-        <Route path="/adminPanel" element={<AdminDashboard />} />
+        <Route path="/adminPanel" />
         <Route path="/createcategory" element={<CreateCategory />} />
         <Route path="/categorylist" element={<CategoryList />} />
         <Route path="/createproduct" element={<CreateProduct />} />

@@ -3,35 +3,45 @@ const userSchema = require("../models/userSchema")
 const bcrypt = require('bcrypt')
 
 async function logInCtrl(req, res) {
-    // console.log(req.session)
-    const { email, password } = req.body
+    const { email, password } = req.body;
+
+    // Step 1: Check for missing inputs
     if (!email || !password) {
-        return res.json({ error: 'email & password is required' })
-    }
-    if (!emailValidation(email)) {
-        return res.json({ error: 'email is not valid' })
+        return res.status(400).json({ success: false, error: 'Email and password are required' });
     }
 
-    const exsistingUser = await userSchema.find({ email })
-    if (exsistingUser.length === 0) {
-        return res.json({ error: 'email is not registered' })
+    // Step 2: Validate email format
+    if (!emailValidation(email)) {
+        return res.status(400).json({ success: false, error: 'Invalid email format' });
     }
-    if (exsistingUser[0].isVarified === false) {
-        return res.json({ error: 'email is not verified' })
+
+    // Step 3: Check if user exists
+    const existingUser = await userSchema.findOne({ email });
+    if (!existingUser) {
+        return res.status(404).json({ success: false, error: 'Email is not registered' });
     }
-    const isMatched = await bcrypt.compare(password, exsistingUser[0].password)
-    if (isMatched) {
-        // session is created here
-        req.session.isAuth = true
-        req.session.user = {
-            id: exsistingUser[0]._id,
-            email: exsistingUser[0].email,
-            firstName: exsistingUser[0].firstName,
-            role: exsistingUser[0].role
-        }
-        
-        return res.status(200).json({ message: 'login success' })
+
+    // Step 4: Check if email is verified
+    if (!existingUser.isVarified) {
+        return res.status(403).json({ success: false, error: 'Email is not verified' });
     }
+
+    // Step 5: Compare password
+    const isMatched = await bcrypt.compare(password, existingUser.password);
+    if (!isMatched) {
+        return res.status(401).json({ success: false, error: 'Incorrect password' });
+    }
+
+    // Step 6: Set session and return success
+    req.session.isAuth = true;
+    req.session.user = {
+        id: existingUser._id,
+        email: existingUser.email,
+        firstName: existingUser.firstName,
+        role: existingUser.role
+    };
+
+    return res.status(200).json({ success: true, message: 'Login successful' });
 }
 
 function logout(req, res) {

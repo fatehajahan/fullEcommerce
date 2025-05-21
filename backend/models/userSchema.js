@@ -39,6 +39,6 @@ const userSchema = new Schema({
         default :"user",
         enum : ["user", "admin"]
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model("UserList", userSchema)

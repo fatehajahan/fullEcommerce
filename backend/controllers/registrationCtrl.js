@@ -28,7 +28,7 @@ async function registrationCtrl(req, res) {
 
     const otp = crypto.randomInt(10000, 99999).toString()
     const otpExpiry = new Date(Date.now() + 5 * 60 * 1000)
-    
+
     bcrypt.hash(password, 10, function (err, hash) {
         const users = new userSchema({
             firstName,
@@ -47,5 +47,32 @@ async function registrationCtrl(req, res) {
         status: 'success',
     })
 }
+// for all users
+async function allUserListsCtrl(req, res) {
+    try {
+        const allusers = await userSchema.find({})
+        res.status(200).json({
+            message: "get all users",
+            statues: "success",
+            data: allusers
+        })
+    } catch (error) {
+        res.status(400).json({ error: "internal server error", statues: "failed" })
+    }
+}
 
-module.exports = registrationCtrl
+// get the last user
+async function userListsCtrl(req, res) {
+    try {
+        const latestUser = await userSchema.findOne().sort({ createdAt: -1 }).limit(1);
+        res.status(200).json({
+            message: "Fetched latest user",
+            status: "success",
+            data: latestUser
+        });
+    } catch (error) {
+        res.status(400).json({ error: "Internal server error", status: "failed" });
+    }
+}
+
+module.exports = { registrationCtrl, userListsCtrl, allUserListsCtrl }
